@@ -1,10 +1,10 @@
 package google_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/dunstack/go-omniauth/provider/google"
+	gotest "github.com/dunstack/go-test"
 	"golang.org/x/oauth2"
 )
 
@@ -48,13 +48,15 @@ func TestClaims(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			claims, err := p.Claims(test.token)
-			if test.err != nil && err != test.err {
-				t.Errorf("error: %v, want: %v", err, test.err)
-			}
-			if test.claims != nil && !reflect.DeepEqual(test.claims, claims) {
-				t.Errorf("claims: %+v, want: %+v", claims, test.claims)
-			}
+			gotest.WithT(t, func(gt *gotest.GoTest) {
+				claims, err := p.Claims(test.token)
+				if test.err != nil {
+					gt.Expect(err).ToBe(test.err)
+				}
+				if test.claims != nil {
+					gt.Expect(claims).ToEqual(test.claims)
+				}
+			})
 		})
 	}
 }
