@@ -50,12 +50,8 @@ func TestClaims(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			gotest.WithT(t, func(gt *gotest.GoTest) {
 				claims, err := p.Claims(test.token)
-				if test.err != nil {
-					gt.Expect(err).ToBe(test.err)
-				}
-				if test.claims != nil {
-					gt.Expect(claims).ToEqual(test.claims)
-				}
+				gt.Expect(err).ToBe(test.err)
+				gt.Expect(claims).ToEqual(test.claims)
 			})
 		})
 	}
